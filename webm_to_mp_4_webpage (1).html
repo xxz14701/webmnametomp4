@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WEBM 轉 MP4（重新命名）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+  <div class="w-full max-w-xl bg-white shadow-xl rounded-2xl p-6 mt-10">
+    <h1 class="text-2xl font-bold mb-4 text-center">WEBM 轉 MP4（僅更改副檔名）</h1>
+
+    <div class="mb-4">
+      <input class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2" type="file" id="fileInput" multiple accept="video/webm" />
+    </div>
+
+    <button id="convertBtn" class="w-full py-2 bg-blue-600 text-white rounded-lg text-lg hover:bg-blue-700 transition">開始轉換</button>
+
+    <div id="result" class="mt-6 space-y-2"></div>
+  </div>
+
+  <script>
+    document.getElementById('convertBtn').addEventListener('click', () => {
+      const files = document.getElementById('fileInput').files;
+      const result = document.getElementById('result');
+      result.innerHTML = '';
+      if (!files.length) {
+        result.innerHTML = '<p class="text-red-600 text-center">請選擇 .webm 檔案</p>';
+        return;
+      }
+
+      Array.from(files).forEach(file => {
+        const blob = new Blob([file], { type: file.type });
+        const newName = file.name.replace(/\.webm$/i, '.mp4');
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = newName;
+        link.textContent = `下載：${newName}`;
+        link.className = 'block bg-green-500 text-white px-4 py-2 rounded-lg text-center hover:bg-green-600 transition';
+        result.appendChild(link);
+      });
+    });
+  </script>
+</body>
+</html>
